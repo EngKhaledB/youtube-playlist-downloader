@@ -7,7 +7,7 @@ A python script to download youtube play lists easily using command line. Thanks
 
 # How to use?
 
-From command line, <code>python ytd [Playlist ID or Playlist Url] [Quality]</code>.
+From command line, <code>python ytd [Playlist ID] [Quality]</code>.
 Quality is optional, if u did not set the quality, it will choose the best quality.
 Quality options: <code>hd, fhd, uhd</code>
 # Examples:
