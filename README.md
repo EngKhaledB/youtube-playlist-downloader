@@ -1,5 +1,5 @@
 # Youtube Playlist Downloader
-A python script to download youtube play lists easily using command line.
+A python script to download youtube play lists easily using command line. Thanks to [pafy](https://github.com/mps-youtube/pafy) Library :).
 
 # Modules Required
 * <code>hurry.filesize</code> module, install it using this command <code>pip install hurry.filesize</code>
