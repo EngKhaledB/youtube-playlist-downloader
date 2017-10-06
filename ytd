@@ -1,0 +1,65 @@
+import os
+import sys
+from hurry.filesize import size
+
+os.environ["PAFY_BACKEND"] = "internal"
+import pafy
+
+DOWNLOAD_PATH = './'
+
+def cleanTitle(title): 
+	disallowed = ["\\", "/", "*", "?", "\"", "|", "<", ">", ":"]
+	for ch in disallowed:
+		title = title.replace(ch,'-')
+	return title
+	
+if len(sys.argv) > 1:
+	hd = '1280x720'
+	fhd = '1920x1080'
+	uhd = '2560x1440'
+	
+	res = ''
+	
+	if len(sys.argv) > 2:
+		if sys.argv[2] in ['hd','fhd','uhd']:
+			res = sys.argv[2]
+	
+	url = ""
+	if "list" in sys.argv[1]:
+		url = sys.argv[1]
+	else:
+		url = "https://www.youtube.com/playlist?list=" + sys.argv[1]
+	
+	list = pafy.get_playlist(url)
+	
+	playlistTitle = list['title']
+	playlistPath = DOWNLOAD_PATH + cleanTitle(playlistTitle)
+	
+	print ("Downloading Playlist: [" + playlistTitle + " ] .." );
+	
+	if not os.path.isdir(playlistPath):
+		os.mkdir(playlistPath);
+	
+	for videoObj in list['items']:
+		video = None
+		
+		if res != '':
+			for s in videoObj['pafy'].streams:
+				if s.resolution == res:
+					video = s
+					break
+
+		if video == None:
+			video = videoObj['pafy'].getbest(preftype="mp4")
+		
+		videoTitle = cleanTitle(video.title) + "." + video.extension
+		
+		file_path = os.path.abspath( playlistPath + '/' + videoTitle )
+		
+		if os.path.isfile(file_path):
+			continue
+			
+		print( "-Downloading Video: [ "+ videoTitle + " ] [ " + size(video.get_filesize()) + " ]")
+		x=video.download(filepath=file_path)
+else:
+	print("\n\n\r ** Missing playlist ID, example use: \n\t python down.py [PLAYLIST ID] \n\t python down.py [PLAYLIST ID] hd \n\t python down.py [PLAYLIST ID] fhd \n\t python down.py [PLAYLIST ID] uhd \n")
